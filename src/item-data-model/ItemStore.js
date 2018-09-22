@@ -56,7 +56,7 @@ class ItemStore {
     this._publish();
 
     // Simulate a network request.
-    await sleepForMillis(3000);
+    await sleepForMillis(2000);
 
     // Create items and publish change.
     const items = [];
@@ -70,7 +70,8 @@ class ItemStore {
   }
 
   async genUpdateItems(items: Array<Item>): Promise<void> {
-    await sleepForMillis(3000);
+    // Simulate a network request.
+    await sleepForMillis(2000);
 
     if (items.some(item => !this._items.find(_item => item.id === _item.id))) {
       throw Error('Trying to delete an unrecognized item');
@@ -85,7 +86,8 @@ class ItemStore {
   }
 
   async genDeleteItems(items: Array<Item>): Promise<void> {
-    await sleepForMillis(3000);
+    // Simulate a network request.
+    await sleepForMillis(2000);
 
     if (items.some(item => !this._items.includes(item))) {
       throw Error('Trying to delete an unrecognized item');

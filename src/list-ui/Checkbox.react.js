@@ -21,7 +21,16 @@ export default class Checkbox extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this._scale = new Animated.Value(1.0);
-    this._color = new Animated.Value(1.0);
+    this._color = new Animated.Value(props.isSelected ? 1.0 : 0.0);
+  }
+
+  componentWillReceiveProps(nextProps: Props): void {
+    if (this.props.isSelected !== nextProps.isSelected) {
+      Animated.timing(this._color, {
+        duration: 200,
+        toValue: nextProps.isSelected ? 1.0 : 0.0,
+      }).start();
+    }
   }
 
   render() {
@@ -32,13 +41,28 @@ export default class Checkbox extends React.Component<Props> {
       styles.root,
     ];
 
+    const backgroundStyles = [
+      {
+        backgroundColor: this._color.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['rgb(255, 255, 255)', 'rgb(70, 151, 247)'],
+        }),
+        borderColor: this._color.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['rgb(221, 221, 221)', 'rgb(70, 151, 247)'],
+        }),
+      },
+      styles.background,
+    ];
     return (
       <TouchableWithoutFeedback
         onPress={this._onPress}
         onPressIn={this._onPressIn}
         onPressOut={this._onPressOut}
       >
-        <Animated.View style={rootStyles} />
+        <Animated.View style={rootStyles}>
+          <Animated.View style={backgroundStyles} />
+        </Animated.View>
       </TouchableWithoutFeedback>
     );
   }
@@ -65,10 +89,13 @@ export default class Checkbox extends React.Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    borderColor: '#DDD',
+  background: {
     borderWidth: 1,
     borderRadius: 2,
+    flex: 1,
+  },
+
+  root: {
     height: MAX_SIZE,
     width: MAX_SIZE,
   },

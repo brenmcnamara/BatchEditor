@@ -8,6 +8,7 @@ import { StyleSheet, View } from 'react-native';
 export type Props = {
   children: *,
   isSelected: boolean,
+  onChangeSelect: (isSelected: boolean) => void,
 };
 
 export default class SelectableItem extends React.Component<Props> {
@@ -15,7 +16,10 @@ export default class SelectableItem extends React.Component<Props> {
     return (
       <View style={styles.root}>
         <View style={styles.checkboxContainer}>
-          <Checkbox isSelected={this.props.isSelected} onPress={() => {}} />
+          <Checkbox
+            isSelected={this.props.isSelected}
+            onPress={this.props.onChangeSelect}
+          />
         </View>
         <View>{this.props.children}</View>
       </View>

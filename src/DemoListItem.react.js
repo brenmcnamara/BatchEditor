@@ -5,7 +5,10 @@ import SelectableListItem from './list-ui/SelectableListItem.react';
 
 import { StyleSheet, View } from 'react-native';
 
-export type Props = {};
+export type Props = {
+  isSelected: boolean,
+  onChangeSelect: (isSelected: boolean) => void,
+};
 
 const HEIGHT = 80;
 
@@ -15,7 +18,10 @@ export default class DemoListItem extends React.Component<Props> {
   render() {
     return (
       <View style={styles.root}>
-        <SelectableListItem isSelected={false}>
+        <SelectableListItem
+          isSelected={this.props.isSelected}
+          onChangeSelect={this.props.onChangeSelect}
+        >
           <View style={styles.row1} />
           <View style={styles.row2} />
         </SelectableListItem>

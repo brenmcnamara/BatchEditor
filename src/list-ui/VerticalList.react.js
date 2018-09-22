@@ -37,6 +37,16 @@ export default class VerticalList extends React.Component<Props, State> {
     };
   }
 
+  static getDerivedStateFromProps(props: Props, state: State): State {
+    return {
+      data: props.data.map(data => ({
+        key: data.key,
+        type: 'SHOWING',
+        value: data,
+      })),
+    };
+  }
+
   render() {
     return (
       <FlatList

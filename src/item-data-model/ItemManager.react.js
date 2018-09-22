@@ -20,7 +20,10 @@ export type Provider$Props = {
   children: *,
 };
 
+export type ItemSelectionMap = { [id: string]: boolean };
+
 export type ContextAPI = {|
+  +changeSelectedItems: (selectionMap: ItemSelectionMap) => void,
   +deleteItems: (items: Array<Item>) => void,
   +getItems: () => Array<Item>,
   +getLoadState: () => LoadState,
@@ -30,6 +33,7 @@ export type ContextAPI = {|
 |};
 
 const DEFAULT_CONTEXT_PROPS: ContextAPI = {
+  changeSelectedItems: FAIL_BECAUSE_ITEM_STORE_NOT_INITIALIZATED,
   deleteItems: FAIL_BECAUSE_ITEM_STORE_NOT_INITIALIZATED,
   getItems: FAIL_BECAUSE_ITEM_STORE_NOT_INITIALIZATED,
   getLoadState: () => ItemStore.initializationLoadState,
@@ -41,7 +45,7 @@ const DEFAULT_CONTEXT_PROPS: ContextAPI = {
 type Provider$State = {
   items: Array<Item>,
   loadState: LoadState,
-  selectionMap: { [id: string]: boolean },
+  selectionMap: ItemSelectionMap,
 };
 
 const { Consumer: ConsumerImpl, Provider: ProviderImpl } = React.createContext(
@@ -122,6 +126,7 @@ export class ItemManagerProvider extends React.Component<
 
   _getValue(): ContextAPI {
     return {
+      changeSelectedItems: this._changeSelectedItems,
       deleteItems: this._deleteItems,
       getItems: this._getItems,
       getLoadState: this._getLoadState,
@@ -130,6 +135,19 @@ export class ItemManagerProvider extends React.Component<
       updateItems: this._updateItems,
     };
   }
+
+  _changeSelectedItems = (deltaSelectionMap: ItemSelectionMap): void => {
+    const selectionMap = { ...this.state.selectionMap };
+    Object.keys(deltaSelectionMap).forEach(itemID => {
+      if (deltaSelectionMap[itemID]) {
+        selectionMap[itemID] = true;
+      } else {
+        delete selectionMap[itemID];
+      }
+    });
+
+    this.setState({ selectionMap });
+  };
 
   _deleteItems = (items: Array<Item>): void => {
     ItemStore.genDeleteItems(items);
@@ -144,9 +162,7 @@ export class ItemManagerProvider extends React.Component<
   };
 
   _getSelectedItems = (): Array<Item> => {
-    return this.state.items.filter(
-      item => this.state.selectionMap[item.id] || false,
-    );
+    return this.state.items.filter(item => this.state.selectionMap[item.id]);
   };
 
   _initialize = (): void => {

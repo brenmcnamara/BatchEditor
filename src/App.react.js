@@ -3,8 +3,7 @@
 /* eslint-disable max-len */
 
 import * as React from 'react';
-import DemoListItem from './DemoListItem.react';
-import VerticalList from './list-ui/VerticalList.react';
+import ItemEditor from './ItemEditor.react';
 
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { ItemManagerConsumerHOC } from './item-data-model/ItemManager.react';
@@ -43,19 +42,11 @@ class App extends React.Component<Props> {
       case 'STEADY': {
         return (
           <View style={styles.listContainer}>
-            <VerticalList data={this._getData()} />
+            <ItemEditor api={this.props.itemManagerAPI} />
           </View>
         );
       }
     }
-  }
-
-  _getData() {
-    return this.props.itemManagerAPI.getItems().map(item => ({
-      height: DemoListItem.HEIGHT,
-      key: item.id,
-      render: () => <DemoListItem />,
-    }));
   }
 }
 
