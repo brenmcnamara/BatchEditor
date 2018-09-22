@@ -8,7 +8,7 @@ import { FlatList } from 'react-native';
 export type ListItem = {
   height: number,
   key: string,
-  render: () => React.ComponentType<*>,
+  render: () => React.Element<*>,
 };
 
 export type Props = {
@@ -47,7 +47,11 @@ export default class VerticalList extends React.Component<Props, State> {
     );
   }
 
-  _getItemLayout = (data: Array<EditStatus<ListItem>>, index: number) => {
+  _getItemLayout = (data: ?Array<EditStatus<ListItem>>, index: number) => {
+    if (!data) {
+      return { length: 0, offset: 0, index };
+    }
+
     // TODO: Assuming all list items have the same height in this call.
     return {
       length: data[index].value.height,

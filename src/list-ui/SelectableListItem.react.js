@@ -6,7 +6,8 @@ import Checkbox from './Checkbox.react';
 import { StyleSheet, View } from 'react-native';
 
 export type Props = {
-  children: React.ChildrenArray<*>,
+  children: *,
+  isSelected: boolean,
 };
 
 export default class SelectableItem extends React.Component<Props> {
@@ -14,7 +15,7 @@ export default class SelectableItem extends React.Component<Props> {
     return (
       <View style={styles.root}>
         <View style={styles.checkboxContainer}>
-          <Checkbox />
+          <Checkbox isSelected={this.props.isSelected} onPress={() => {}} />
         </View>
         <View>{this.props.children}</View>
       </View>
@@ -24,7 +25,9 @@ export default class SelectableItem extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   checkboxContainer: {
-    width: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 50,
   },
 
   root: {

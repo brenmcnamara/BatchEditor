@@ -7,7 +7,7 @@ import { StyleSheet, View } from 'react-native';
 
 export type Props = {};
 
-const HEIGHT = 60;
+const HEIGHT = 80;
 
 export default class DemoListItem extends React.Component<Props> {
   static HEIGHT = HEIGHT;
@@ -15,7 +15,7 @@ export default class DemoListItem extends React.Component<Props> {
   render() {
     return (
       <View style={styles.root}>
-        <SelectableListItem>
+        <SelectableListItem isSelected={false}>
           <View style={styles.row1} />
           <View style={styles.row2} />
         </SelectableListItem>
